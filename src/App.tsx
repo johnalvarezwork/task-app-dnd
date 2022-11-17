@@ -4,12 +4,10 @@ import {
   Card,
   CardContent,
   Typography,
-  Box,
   Container,
   Grid,
   Paper,
 } from '@mui/material';
-import { maxWidth } from '@mui/system';
 
 function App() {
   return (
@@ -20,8 +18,9 @@ function App() {
           elevation={10}
           sx={{
             margin: '3rem auto',
-            background: 'light gray',
+            background: 'gray',
             maxWidth: '25rem',
+            paddingTop: '1rem',
           }}
         >
           <Typography variant="h4" color="text.secondary" gutterBottom>
@@ -31,22 +30,30 @@ function App() {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Paper elevation={8}>
-                  <Typography>Task 1</Typography>
+                  <Typography color="text.secondary" gutterBottom>
+                    Task 1
+                  </Typography>
                 </Paper>
               </Grid>
               <Grid item xs={12}>
                 <Paper elevation={8}>
-                  <Typography>Task 2</Typography>
+                  <Typography color="text.secondary" gutterBottom>
+                    Task 2
+                  </Typography>
                 </Paper>
               </Grid>
               <Grid item xs={12}>
                 <Paper elevation={8}>
-                  <Typography>Task 3</Typography>
+                  <Typography color="text.secondary" gutterBottom>
+                    Task 3
+                  </Typography>
                 </Paper>
               </Grid>
               <Grid item xs={12}>
                 <Paper elevation={8}>
-                  <Typography>Task 4</Typography>
+                  <Typography color="text.secondary" gutterBottom>
+                    Task 4
+                  </Typography>
                 </Paper>
               </Grid>
             </Grid>
