@@ -14,15 +14,34 @@ import Chance from 'chance';
 const chance = new Chance();
 
 const arr = [
-  chance.guid(),
-  chance.guid(),
-  chance.guid(),
-  chance.guid(),
-  chance.guid(),
+  {
+    id: `id-${chance.guid()}`,
+    content: 'Item 1',
+    color: 'white',
+    bgColor: 'darkred',
+  },
+  {
+    id: `id-${chance.guid()}`,
+    content: 'Item 2',
+    color: 'white',
+    bgColor: 'green',
+  },
+  {
+    id: `id-${chance.guid()}`,
+    content: 'Item 3',
+    color: 'white',
+    bgColor: '#00008B',
+  },
+  {
+    id: `id-${chance.guid()}`,
+    content: 'Item 4',
+    color: 'black',
+    bgColor: '#CCCC00',
+  },
 ];
 
 const Item = ({ i, data }) => (
-  <Draggable draggableId={`${data}`} index={i}>
+  <Draggable draggableId={`${data.id}`} index={i}>
     {(provided) => (
       <Grid
         item
@@ -32,8 +51,14 @@ const Item = ({ i, data }) => (
         {...provided.dragHandleProps}
       >
         <Paper elevation={8}>
-          <Typography color="text.secondary" gutterBottom>
-            Task {i + 1}
+          <Typography
+            fontWeight="bold"
+            fontSize={'20pt'}
+            gutterBottom
+            color={data.color}
+            bgcolor={data.bgColor}
+          >
+            {data.content}
           </Typography>
         </Paper>
       </Grid>
@@ -41,7 +66,7 @@ const Item = ({ i, data }) => (
   </Draggable>
 );
 
-const DropItem = () => {
+const DropItem = ({ list }) => {
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
@@ -66,8 +91,8 @@ const DropItem = () => {
           ref={provided.innerRef}
           {...provided.droppableProps}
         >
-          {arr.map((ele, i) => (
-            <Item key={`${ele}-key`} data={ele} i={i} />
+          {list.map((ele, i) => (
+            <Item key={ele.id} data={ele} i={i} />
           ))}
           {provided.placeholder}
         </Grid>
@@ -77,9 +102,32 @@ const DropItem = () => {
 };
 
 function App() {
-  const onDragEnd = (result) => {
-    // TODO: reorder our column
+  const [state, setState] = useState<any[]>(arr);
+
+  const reorder = (list, startIndex, endIndex) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+
+    return result;
   };
+
+  const onDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+    if (result.destination.index === result.source.index) {
+      return;
+    }
+    const newTasks = reorder(
+      state,
+      result.source.index,
+      result.destination.index
+    );
+
+    setState(newTasks);
+  };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="App">
@@ -95,10 +143,10 @@ function App() {
             }}
           >
             <Typography variant="h4" color="text.secondary" gutterBottom>
-              Task List
+              Item List
             </Typography>
             <CardContent>
-              <DropItem />
+              <DropItem list={state} />
             </CardContent>
           </Card>
         </Container>
