@@ -8,8 +8,29 @@ import {
   Grid,
   Paper,
 } from '@mui/material';
+import { DragDropContext } from 'react-beautiful-dnd';
 
 function App() {
+  const onDragEnd = (result) => {
+    // TODO: reorder our column
+  };
+
+  const getListItems = (count) => {
+    const list: any[] = [];
+    for (let i = 0; i < count; i++) {
+      list.push(
+        <Grid item xs={12}>
+          <Paper elevation={8}>
+            <Typography color="text.secondary" gutterBottom>
+              Task {i + 1}
+            </Typography>
+          </Paper>
+        </Grid>
+      );
+    }
+    return <>{list}</>;
+  };
+
   return (
     <div className="App">
       <Container>
@@ -28,34 +49,7 @@ function App() {
           </Typography>
           <CardContent>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Paper elevation={8}>
-                  <Typography color="text.secondary" gutterBottom>
-                    Task 1
-                  </Typography>
-                </Paper>
-              </Grid>
-              <Grid item xs={12}>
-                <Paper elevation={8}>
-                  <Typography color="text.secondary" gutterBottom>
-                    Task 2
-                  </Typography>
-                </Paper>
-              </Grid>
-              <Grid item xs={12}>
-                <Paper elevation={8}>
-                  <Typography color="text.secondary" gutterBottom>
-                    Task 3
-                  </Typography>
-                </Paper>
-              </Grid>
-              <Grid item xs={12}>
-                <Paper elevation={8}>
-                  <Typography color="text.secondary" gutterBottom>
-                    Task 4
-                  </Typography>
-                </Paper>
-              </Grid>
+              {getListItems(4)}
             </Grid>
           </CardContent>
         </Card>
