@@ -3,7 +3,7 @@ import { DragDropContext as DragAndDropContext } from 'react-beautiful-dnd';
 
 interface DragDropContextProps {
   items: any[];
-  updateItems: React.Dispatch<React.SetStateAction<any[]>>;
+  updateItems: (entity: any, reorder: any) => void;
   children?: React.ReactNode;
   [restOfProps: string]: any;
 }
@@ -25,14 +25,8 @@ export function DragDropContext(props: DragDropContextProps) {
     if (!result.destination) return;
     if (result.destination.index === result.source.index) return;
 
-    const newTasks = reorder(
-      items,
-      result.source.index,
-      result.destination.index
-    );
-
     //mutation in gql
-    updateItems(newTasks);
+    updateItems(result, reorder);
   };
 
   return (
