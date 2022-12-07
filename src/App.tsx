@@ -24,20 +24,22 @@ function App() {
   const [lists, setLists] = useState<any[]>(newLists);
 
   const updateEntity = (entity: any, reorder: any) => {
-    const listsIndex = parseInt(entity.destination.droppableId.split('-')[1]);
+    const type = entity.destination.droppableId.split('#')[0];
+    const listsIndex = parseInt(entity.destination.droppableId.split('#')[1]);
 
-    const newItems = reorder(
-      lists[listsIndex].items,
-      entity.source.index,
-      entity.destination.index
-    );
+    if (type === 'child') {
+      const newItems = reorder(
+        lists[listsIndex].items,
+        entity.source.index,
+        entity.destination.index
+      );
 
-    const newLists = [...lists];
+      const newLists = [...lists];
 
-    newLists[listsIndex].items = newItems;
+      newLists[listsIndex].items = newItems;
 
-    setLists(newLists);
-    // console.log('items', items ?? []);
+      setLists(newLists);
+    }
   };
 
   return (
@@ -54,7 +56,7 @@ function App() {
           {lists.map((list, i) => {
             return (
               <Card
-                key={`parent-${i}`}
+                key={`parent#container#${list.id}`}
                 variant="elevation"
                 elevation={10}
                 sx={{
@@ -68,9 +70,16 @@ function App() {
                   {list.content}
                 </Typography>
                 <CardContent>
-                  <DragDropGridContainer id={`parent-${i}`} spacing={2}>
+                  <DragDropGridContainer
+                    id={`child#${i}#container#${list.id}`}
+                    spacing={2}
+                  >
                     {list.items.map((ele: any, index: any) => (
-                      <DragDropGridItem key={ele.id} id={ele.id} index={index}>
+                      <DragDropGridItem
+                        key={`child#item#${ele.id}`}
+                        id={`child#item#${ele.id}`}
+                        index={index}
+                      >
                         <Paper elevation={8}>
                           <Typography
                             fontWeight="bold"
