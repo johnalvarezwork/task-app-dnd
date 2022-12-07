@@ -3,13 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 
 interface DragDropGridContainerProps {
+  disabled?: boolean;
   id: string;
   children?: React.ReactNode;
   [restOfProps: string]: any;
 }
 
 export function DragDropGridContainer(props: DragDropGridContainerProps) {
-  const { id, children, ...restOfProps } = props;
+  const { id, children, disabled, ...restOfProps } = props;
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
@@ -24,7 +25,7 @@ export function DragDropGridContainer(props: DragDropGridContainerProps) {
   if (!enabled) return null;
 
   return (
-    <Droppable droppableId={id}>
+    <Droppable isDropDisabled={disabled} droppableId={id}>
       {(provided: any) => {
         return (
           <Grid

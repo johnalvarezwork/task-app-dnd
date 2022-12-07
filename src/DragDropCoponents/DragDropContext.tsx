@@ -4,6 +4,7 @@ import { DragDropContext as DragAndDropContext } from 'react-beautiful-dnd';
 interface DragDropContextProps {
   items: any[];
   updateItems: (entity: any, reorder: any) => void;
+  onDragStart: (entity: any) => void;
   children?: React.ReactNode;
   [restOfProps: string]: any;
 }

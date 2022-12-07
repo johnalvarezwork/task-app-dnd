@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, Typography, Container, Paper } from '@mui/material';
 import { DragDropContext } from './DragDropCoponents/DragDropContext';
 import { DragDropGridContainer } from './DragDropCoponents/DragDropGridContainer';
@@ -22,12 +22,23 @@ newLists.push(getListData(parentIdC, 'C', getItemDataC(parentIdC)));
 
 function App() {
   const [lists, setLists] = useState<any[]>(newLists);
+  const [type, setType] = useState('');
 
   const updateEntity = (entity: any, reorder: any) => {
-    const type = entity.destination.droppableId.split('#')[0];
+    const entityType = entity.destination.droppableId.split('#')[0];
     const listsIndex = parseInt(entity.destination.droppableId.split('#')[1]);
 
-    if (type === 'child') {
+    if (entityType === 'parent') {
+      const newLists = reorder(
+        lists,
+        entity.source.index,
+        entity.destination.index
+      );
+
+      setLists(newLists);
+    }
+
+    if (entityType === 'child') {
       const newItems = reorder(
         lists[listsIndex].items,
         entity.source.index,
@@ -42,8 +53,16 @@ function App() {
     }
   };
 
+  const onDragStart = (entity: any) => {
+    setType(entity.draggableId.split('#')[0]);
+  };
+
   return (
-    <DragDropContext items={lists} updateItems={updateEntity}>
+    <DragDropContext
+      items={lists}
+      updateItems={updateEntity}
+      onDragStart={onDragStart}
+    >
       <div className="App">
         <Container
           style={{
@@ -53,51 +72,66 @@ function App() {
             padding: '2rem',
           }}
         >
-          {lists.map((list, i) => {
-            return (
-              <Card
-                key={`parent#container#${list.id}`}
-                variant="elevation"
-                elevation={10}
-                sx={{
-                  margin: '2rem 1rem',
-                  background: 'gray',
-                  maxWidth: '25rem',
-                  paddingTop: '1rem',
-                }}
-              >
-                <Typography variant="h4" color="text.secondary" gutterBottom>
-                  {list.content}
-                </Typography>
-                <CardContent>
-                  <DragDropGridContainer
-                    id={`child#${i}#container#${list.id}`}
-                    spacing={2}
+          <DragDropGridContainer
+            disabled={type === 'child' ? true : false}
+            id={`parent#container`}
+          >
+            {lists.map((list, i) => {
+              return (
+                <DragDropGridItem
+                  index={i}
+                  id={`parent#item#${list.id}`}
+                  key={`parent#item#${list.id}`}
+                >
+                  <Card
+                    variant="elevation"
+                    elevation={10}
+                    sx={{
+                      margin: '2rem 1rem',
+                      background: 'gray',
+                      maxWidth: '25rem',
+                      paddingTop: '1rem',
+                    }}
                   >
-                    {list.items.map((ele: any, index: any) => (
-                      <DragDropGridItem
-                        key={`child#item#${ele.id}`}
-                        id={`child#item#${ele.id}`}
-                        index={index}
+                    <Typography
+                      variant="h4"
+                      color="text.secondary"
+                      gutterBottom
+                    >
+                      {list.content}
+                    </Typography>
+                    <CardContent>
+                      <DragDropGridContainer
+                        disabled={type === 'parent' ? true : false}
+                        id={`child#${i}#container#${list.id}`}
+                        spacing={2}
                       >
-                        <Paper elevation={8}>
-                          <Typography
-                            fontWeight="bold"
-                            fontSize={'20pt'}
-                            gutterBottom
-                            color={ele.color}
-                            bgcolor={ele.bgColor}
+                        {list.items.map((ele: any, index: any) => (
+                          <DragDropGridItem
+                            key={`child#item#${ele.id}`}
+                            id={`child#item#${ele.id}`}
+                            index={index}
                           >
-                            {ele.content}
-                          </Typography>
-                        </Paper>
-                      </DragDropGridItem>
-                    ))}
-                  </DragDropGridContainer>
-                </CardContent>
-              </Card>
-            );
-          })}
+                            <Paper elevation={8}>
+                              <Typography
+                                fontWeight="bold"
+                                fontSize={'20pt'}
+                                gutterBottom
+                                color={ele.color}
+                                bgcolor={ele.bgColor}
+                              >
+                                {ele.content}
+                              </Typography>
+                            </Paper>
+                          </DragDropGridItem>
+                        ))}
+                      </DragDropGridContainer>
+                    </CardContent>
+                  </Card>
+                </DragDropGridItem>
+              );
+            })}
+          </DragDropGridContainer>
         </Container>
       </div>
     </DragDropContext>
