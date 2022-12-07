@@ -12,7 +12,7 @@ export function DragDropContext(props: DragDropContextProps) {
   //gql query and mutation for state and setting state
   const { items, updateItems, children, ...restOFProps } = props;
 
-  const reorder = (items, startIndex, endIndex) => {
+  const reorder = (items: any, startIndex: number, endIndex: number) => {
     const newList = [...items];
     const [removed] = newList.splice(startIndex, 1);
 
@@ -21,7 +21,7 @@ export function DragDropContext(props: DragDropContextProps) {
     return newList;
   };
 
-  const onDragEnd = (result) => {
+  const onDragEnd = (result: any) => {
     if (!result.destination) return;
     if (result.destination.index === result.source.index) return;
 

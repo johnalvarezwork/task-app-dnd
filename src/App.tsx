@@ -1,15 +1,10 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Typography, Container, Paper } from '@mui/material';
-import { DragDropContext } from './DragDropCoponents/DragDropContext.tsx';
-import { DragDropGridContainer } from './DragDropCoponents/DragDropGridContainer.tsx';
-import { DragDropGridItem } from './DragDropCoponents/DragDropGridItem.tsx';
-import {
-  getListData,
-  getItemDataA,
-  getItemDataB,
-  getItemDataC,
-} from './data.ts';
+import { DragDropContext } from './DragDropCoponents/DragDropContext';
+import { DragDropGridContainer } from './DragDropCoponents/DragDropGridContainer';
+import { DragDropGridItem } from './DragDropCoponents/DragDropGridItem';
+import { getListData, getItemDataA, getItemDataB, getItemDataC } from './data';
 
 import Chance from 'chance';
 
@@ -28,7 +23,7 @@ newLists.push(getListData(parentIdC, 'C', getItemDataC(parentIdC)));
 function App() {
   const [lists, setLists] = useState<any[]>(newLists);
 
-  const updateEntity = (entity, reorder) => {
+  const updateEntity = (entity: any, reorder: any) => {
     const listsIndex = parseInt(entity.destination.droppableId.split('-')[1]);
 
     const newItems = reorder(
@@ -74,7 +69,7 @@ function App() {
                 </Typography>
                 <CardContent>
                   <DragDropGridContainer id={`parent-${i}`} spacing={2}>
-                    {list.items.map((ele, index) => (
+                    {list.items.map((ele: any, index: any) => (
                       <DragDropGridItem key={ele.id} id={ele.id} index={index}>
                         <Paper elevation={8}>
                           <Typography

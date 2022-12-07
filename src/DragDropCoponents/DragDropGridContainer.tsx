@@ -25,7 +25,7 @@ export function DragDropGridContainer(props: DragDropGridContainerProps) {
 
   return (
     <Droppable droppableId={id}>
-      {(provided) => {
+      {(provided: any) => {
         return (
           <Grid
             container
